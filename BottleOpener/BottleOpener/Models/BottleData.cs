@@ -17,6 +17,7 @@ namespace BottleOpener.Models
             Time = DateTime.Now;
             RawData = new List<int>(_rawdata);
             AvgData = RawData.Sum() / RawData.Count;
+            Console.WriteLine("Calculated Value: {0}", AvgData.ToString());
         }
     }
 }

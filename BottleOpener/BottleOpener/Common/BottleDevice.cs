@@ -14,6 +14,7 @@ namespace BottleOpener.Common
     {
         private SerialPort _socket;
         private BottleCommunicationProtocol _comm;
+        private Queue<List<int>> _data;
 
         bool _isThreadStarted = false;
         Thread _readThread;
@@ -22,10 +23,7 @@ namespace BottleOpener.Common
         public BottleDevice(string portname, int baudrate)
         {
             _socket = new SerialPort();
-            _comm = new BottleCommunicationProtocol();
-
-            _readThread = new Thread(new ThreadStart(Read));
-            _readThread.Name = "BottleReadThread";
+            _comm = new BottleCommunicationProtocol();          
 
             _socket.PortName = portname;
             _socket.BaudRate = baudrate;
@@ -33,8 +31,12 @@ namespace BottleOpener.Common
             _socket.Parity = Parity.None;
             _socket.StopBits = StopBits.One;
 
+            _readThread = new Thread(new ThreadStart(Read));
+            _readThread.Name = "BottleReadThread";
             _isThreadStarted = true;
             _readThread.Start();
+
+            _data = new Queue<List<int>>();
         }    
 
         public void Connect()
@@ -82,7 +84,6 @@ namespace BottleOpener.Common
             }
         }
 
-
         public void Disconnect()
         {
             try
@@ -113,6 +114,7 @@ namespace BottleOpener.Common
                         {
                             //strip the newline
                             message = message.Replace("\r", "");
+                            EnqueueData(message);
                             BottleLogger.Instance.Write(message);
                         }
                     }
@@ -120,6 +122,40 @@ namespace BottleOpener.Common
                 catch (Exception) { }
             }
 
+        }
+
+        public Queue<List<int>> Data
+        {
+            get { return _data; }            
+        }
+
+        private void EnqueueData(string data)
+        {
+            char[] delimiters = { 'x' };
+
+            List<string> _sData = data.Split(delimiters).ToList();
+
+            List<int> _iData = new List<int>();
+
+            foreach (string item in _sData)
+            {
+                int datavalue;
+                bool parsed = Int32.TryParse(item, out datavalue);
+                if (parsed)
+                {
+                    _iData.Add(datavalue);
+                }
+            }
+
+            if (_iData.Count > 0)
+            {
+                _data.Enqueue(_iData);
+            }
+        }
+
+        public List<int> RetrieveData()
+        {
+            return _data.Dequeue();
         }
 
         public void Dispose()

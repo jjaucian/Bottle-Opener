@@ -18,9 +18,7 @@ namespace BottleOpener.ViewModels
 
         public BottleConfigurationViewModel()
         {
-            _bottle = new BottleDataRepository();
-            
-
+            _bottle = BottleDataRepository.Instance;        
         }
 
         private ICommand _connectBottleCommand;

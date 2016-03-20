@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BottleOpener.DataAccess;
+using BottleOpener.Models;
 
 using OxyPlot;
 
@@ -10,10 +12,12 @@ namespace BottleOpener.ViewModels
 {
     public class BottleChartViewModel
     {
+        BottleDataRepository _repo;
 
         public BottleChartViewModel()
         {
-            Titles = "Example 2";
+            _repo = BottleDataRepository.Instance;
+
             Points = new List<DataPoint>
                               {
                                   new DataPoint(0, 4),
@@ -29,8 +33,14 @@ namespace BottleOpener.ViewModels
                               };
         }
 
-        public string Titles { get; private set; }
-
         public IList<DataPoint> Points { get; private set; }
+
+        public void ConvertSessionData()
+        {
+            List<BottleData> _list = _repo.GetSessionData();
+ 
+
+        }
+
     }
 }
