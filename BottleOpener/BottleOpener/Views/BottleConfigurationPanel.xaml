@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="BottleOpener.BottleConfigurationPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BottleOpener"
+             mc:Ignorable="d" 
+             >
+    <Grid>
+        <GroupBox x:Name="groupBox" Header="Bottle Configuration" >
+            <StackPanel Orientation="Vertical" Margin="0">
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Label x:Name="CommPortLabel" Content="Comm Port" HorizontalAlignment="Right"/>
+                    <ComboBox x:Name="CommPortComboBox" Width="120"/>
+                </StackPanel>
+                <GroupBox x:Name="CommandsGroup" Header="Commands" >
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <Button x:Name="BottleConnectButton" Content="Connect" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="5" Command="{Binding Path=ConnectBottleCommand}"/>
+                        <Button x:Name="BottleStartButton" Content="Start" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="5" Command="{Binding Path=StartSessionCommand}"/>
+                        <Button x:Name="BottleStopButton" Content="Stop" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="5" Command="{Binding Path=StopSessionCommand}"/>
+                        <Button x:Name="BottleDisconnectButton" Content= "Disconnect" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="5" Command="{Binding Path=DisconnectBottleCommand}"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</UserControl>
