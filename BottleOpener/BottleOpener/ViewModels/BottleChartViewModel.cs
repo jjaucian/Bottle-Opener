@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Threading;
+using System.Collections.ObjectModel;
+using System.Windows.Threading;
 using BottleOpener.DataAccess;
 using BottleOpener.Models;
 
@@ -12,35 +16,38 @@ namespace BottleOpener.ViewModels
 {
     public class BottleChartViewModel
     {
+        private const int UpdateInterval = 20;
+        BottleLogger _log = BottleLogger.Instance;
         BottleDataRepository _repo;
 
+        double _timecounter = 0.0;
+        
         public BottleChartViewModel()
         {
+            PlotModel = new PlotModel();
+
             _repo = BottleDataRepository.Instance;
 
-            Points = new List<DataPoint>
-                              {
-                                  new DataPoint(0, 4),
-                                  new DataPoint(10, 13),
-                                  new DataPoint(20, 15),
-                                  new DataPoint(30, 16),
-                                  new DataPoint(40, 12),
-                                  new DataPoint(50, 12),
-                                  new DataPoint(50, 11),
-                                  new DataPoint(50, 10),
-                                  new DataPoint(50, 8),
-                                  new DataPoint(50, 4)
-                              };
+            Points = new ObservableCollection<DataPoint>();
+            _repo.Updated += UpdateMessages;
         }
 
-        public IList<DataPoint> Points { get; private set; }
+        public PlotModel PlotModel { get; private set; }
 
-        public void ConvertSessionData()
+        public ObservableCollection<DataPoint> Points { get; private set; }
+
+        private void UpdateMessages(object sender, BottleDataEventArgs e)
         {
-            List<BottleData> _list = _repo.GetSessionData();
- 
+            Console.WriteLine("Adding Plot Item: {0}", _timecounter);
+
+            App.Current.Dispatcher.InvokeAsync((Action)(() =>
+            {
+                _timecounter += 0.05;
+                Points.Add(new DataPoint(_timecounter, e._bottlevalue));
+
+                PlotModel.InvalidatePlot(true);
+            }));
 
         }
-
     }
 }

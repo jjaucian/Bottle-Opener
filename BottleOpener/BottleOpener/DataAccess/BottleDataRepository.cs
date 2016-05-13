@@ -9,11 +9,33 @@ using System.Threading;
 
 namespace BottleOpener.DataAccess
 {
+    public class BottleDataEventArgs : EventArgs
+    {
+        public int _bottlevalue
+        {
+            get; set;
+        }
+
+        public BottleDataEventArgs(int data)
+        {
+            _bottlevalue = data;
+        }
+    }
+
     public class BottleDataRepository
     {
         #region Singleton
         private static BottleDataRepository _instance;
         #endregion
+
+        public event EventHandler<BottleDataEventArgs> Updated;
+        protected virtual void OnUpdated(BottleDataEventArgs e)
+        {
+            if (Updated != null)
+            {
+                Updated(this, e);
+            }
+        }
 
         #region Fields
 
@@ -29,7 +51,7 @@ namespace BottleOpener.DataAccess
 
         private BottleDataRepository()
         {
-            _device = new BottleDevice("COM3", 19200);
+            _device = new BottleDevice("COM3", 28800);
             _bottleData = new List<BottleData>();
 
             _readThread = new Thread(new ThreadStart(AddData));
@@ -61,7 +83,9 @@ namespace BottleOpener.DataAccess
                 while (_device != null && _device.Data.Count > 0)
                 {
                     Console.WriteLine("Recording Data");
-                    _bottleData.Add(new BottleData(_device.RetrieveData()));
+                    BottleData _latestData = new BottleData(_device.RetrieveData());
+                    _bottleData.Add(_latestData);
+                    OnUpdated(new BottleDataEventArgs(_latestData.AvgData));
                     Thread.Sleep(1);
                 }
             }

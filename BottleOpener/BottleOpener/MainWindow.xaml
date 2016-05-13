@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BottleOpener"
         mc:Ignorable="d"
-        Title="Bottle Opener V0.1" Height="375" Width="915" >
+        Title="Bottle Opener V0.1" Height="375" Width="925" >
     <Grid>
         <StackPanel Orientation="Horizontal" Margin="5">
-            <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical" Width="395">
                 <local:BottleConfigurationPanel VerticalAlignment="Top" Margin="5"/>
                 <local:LogMessagePanel Margin="5"/>                
             </StackPanel>
