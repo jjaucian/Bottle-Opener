@@ -33,8 +33,7 @@ namespace BottleOpener.Common
 
             _readThread = new Thread(new ThreadStart(Read));
             _readThread.Name = "BottleReadThread";
-            _isThreadStarted = true;
-            _readThread.Start();
+
 
             _data = new Queue<List<int>>();
         }    
@@ -45,7 +44,9 @@ namespace BottleOpener.Common
             {
                 if (!_socket.IsOpen)
                 {
-                    _socket.Open();                    
+                    _socket.Open();
+                    _isThreadStarted = true;
+                    _readThread.Start();
                     _socket.Write("c100");
                 }
             } catch (Exception)
@@ -57,46 +58,45 @@ namespace BottleOpener.Common
 
         public void StartData()
         {
-            try
-            {
-                if (_socket.IsOpen)
-                {
-                    _socket.Write("s100");                    
-                }
-            }
-            catch (Exception) {
-                BottleLogger.Instance.Write("Unable to send start data command to bottle.");
-            }
+            SendMessage("s100");
         }
 
         public void StopData()
         {
-            try
-            {
-                if (_socket.IsOpen)
-                {
-                    _socket.Write("t100");
-                }
-            }
-            catch (Exception)
-            {
-                BottleLogger.Instance.Write("Unable to send stop data command to bottle.");
-            }
+            SendMessage("t100");
         }
 
         public void Disconnect()
         {
+            SendMessage("d100");
             try
             {
-                if (_socket.IsOpen)
-                {
-                    _socket.Write("d100");
-                    _socket.Close();
-                    
-                }
-            } catch (Exception)
+                _isThreadStarted = false;
+                _readThread.Join();
+                _socket.Close();
+            }
+            catch (Exception)
             {
                 BottleLogger.Instance.Write("Error occurred while disconnecting");
+            }
+        }
+
+        private void SendMessage(string msg)
+        {
+            if (_socket.IsOpen)
+            {
+                try
+                {
+                    _socket.Write(msg);
+                }
+                catch (Exception)
+                {
+                    BottleLogger.Instance.Write("Unable to send " + msg + "command to bottle.");
+                }
+            }
+            else
+            {
+                BottleLogger.Instance.Write("Bottle is not connected.");
             }
         }
         
@@ -119,7 +119,10 @@ namespace BottleOpener.Common
                         }
                     }
                 }
-                catch (Exception) { }
+                catch (Exception)
+                {
+                    BottleLogger.Instance.Write("Bottle Read Thread Crashed.");
+                }
             }
 
         }

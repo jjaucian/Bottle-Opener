@@ -11,16 +11,16 @@
             <StackPanel Orientation="Vertical" Margin="0">
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <Label x:Name="CommPortLabel" Content="Comm Port" HorizontalAlignment="Right"/>
-                    <ComboBox x:Name="CommPortComboBox" Width="120"/>
+                    <ComboBox x:Name="CommPortComboBox" Width="120" ItemsSource="{Binding CommPorts}" SelectedItem="{Binding SelectedPort}">
+
+                    </ComboBox>
                 </StackPanel>
-                <GroupBox x:Name="CommandsGroup" Header="Commands" >
-                    <StackPanel Orientation="Horizontal" Margin="5">
+                <StackPanel Orientation="Horizontal" Margin="5">
                         <Button x:Name="BottleConnectButton" Content="Connect" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="5" Command="{Binding Path=ConnectBottleCommand}"/>
                         <Button x:Name="BottleStartButton" Content="Start" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="5" Command="{Binding Path=StartSessionCommand}"/>
                         <Button x:Name="BottleStopButton" Content="Stop" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="5" Command="{Binding Path=StopSessionCommand}"/>
                         <Button x:Name="BottleDisconnectButton" Content= "Disconnect" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="5" Command="{Binding Path=DisconnectBottleCommand}"/>
-                    </StackPanel>
-                </GroupBox>
+                    </StackPanel>          
             </StackPanel>
         </GroupBox>
     </Grid>

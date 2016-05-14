@@ -41,7 +41,6 @@ namespace BottleOpener.DataAccess
 
         private List<BottleData> _bottleData;
         private BottleDevice _device;
-
         bool _isThreadStarted = false;
         Thread _readThread;
 
@@ -50,8 +49,7 @@ namespace BottleOpener.DataAccess
         #region Constructor
 
         private BottleDataRepository()
-        {
-            _device = new BottleDevice("COM3", 28800);
+        {         
             _bottleData = new List<BottleData>();
 
             _readThread = new Thread(new ThreadStart(AddData));
@@ -96,8 +94,9 @@ namespace BottleOpener.DataAccess
             return new List<BottleData>(_bottleData);
         }
 
-        public void ConnectBottle()
+        public void ConnectBottle(string port)
         {
+            _device = new BottleDevice(port, 28800);
             _device.Connect();
         }
 

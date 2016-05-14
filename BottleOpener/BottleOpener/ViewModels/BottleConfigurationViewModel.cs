@@ -7,6 +7,7 @@ using System.Windows.Input;
 using BottleOpener.Models;
 using BottleOpener.Common;
 using BottleOpener.DataAccess;
+using System.IO.Ports;
 
 namespace BottleOpener.ViewModels
 {
@@ -14,11 +15,21 @@ namespace BottleOpener.ViewModels
     {
 
         private BottleDataRepository _bottle;
-        private List<string> _commPort;
+        private List<string> _commPorts;
 
         public BottleConfigurationViewModel()
         {
-            _bottle = BottleDataRepository.Instance;        
+            _bottle = BottleDataRepository.Instance;
+            _commPorts = new List<string>(SerialPort.GetPortNames());
+            SelectedPort = "COM3";
+        }
+
+        public string SelectedPort { get; set; }
+
+        public List<string> CommPorts
+        {
+            get { return _commPorts; }
+            set { _commPorts = value; }
         }
 
         private ICommand _connectBottleCommand;
@@ -36,7 +47,7 @@ namespace BottleOpener.ViewModels
                     _connectBottleCommand = new RelayCommand(
                         param => {
                             BottleLogger.Instance.Write("Connecting to bottle.");
-                            _bottle.ConnectBottle();
+                            _bottle.ConnectBottle(SelectedPort);
                             
                         }
                         );
