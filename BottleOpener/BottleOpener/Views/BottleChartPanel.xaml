@@ -9,10 +9,14 @@
              >
     <Grid Height="315" Width="500">
         <GroupBox Header="Bottle Raw Data Chart">
-            <oxy:Plot Margin="5">
+            <oxy:Plot Margin="5" LegendTitle="IRSENSOR_01">
                 <oxy:Plot.Series>
                     <oxy:LineSeries ItemsSource="{Binding Path=Points}"/>
                 </oxy:Plot.Series>
+                <oxy:Plot.Axes>
+                    <oxy:LinearAxis Position="Bottom"   Minimum="0" Maximum="120" />
+                    <oxy:LinearAxis Position="Left" Minimum="0" Maximum="750" />
+                </oxy:Plot.Axes>
             </oxy:Plot>
         </GroupBox>
     </Grid>

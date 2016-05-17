@@ -33,6 +33,7 @@ namespace BottleOpener.Common
 
             _readThread = new Thread(new ThreadStart(Read));
             _readThread.Name = "BottleReadThread";
+            _readThread.IsBackground = true;
 
 
             _data = new Queue<List<int>>();

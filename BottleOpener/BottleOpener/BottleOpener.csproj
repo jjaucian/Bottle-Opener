@@ -77,6 +77,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\BottleStatusPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\LogMessagePanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -105,6 +109,9 @@
     </Compile>
     <Compile Include="Views\BottleConfigurationPanel.xaml.cs">
       <DependentUpon>BottleConfigurationPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BottleStatusPanel.xaml.cs">
+      <DependentUpon>BottleStatusPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LogMessagePanel.xaml.cs">
       <DependentUpon>LogMessagePanel.xaml</DependentUpon>

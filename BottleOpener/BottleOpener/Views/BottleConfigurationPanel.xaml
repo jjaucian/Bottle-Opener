@@ -4,23 +4,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BottleOpener"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" Height="140" 
              >
     <Grid>
         <GroupBox x:Name="groupBox" Header="Bottle Configuration" >
             <StackPanel Orientation="Vertical" Margin="0">
-                <StackPanel Orientation="Horizontal" Margin="5">
+                <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Left">
                     <Label x:Name="CommPortLabel" Content="Comm Port" HorizontalAlignment="Right"/>
-                    <ComboBox x:Name="CommPortComboBox" Width="120" ItemsSource="{Binding CommPorts}" SelectedItem="{Binding SelectedPort}">
-
+                    <ComboBox x:Name="CommPortComboBox" Width="94" ItemsSource="{Binding CommPorts}" SelectedItem="{Binding SelectedPort}" Height="20">
                     </ComboBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="5">
-                        <Button x:Name="BottleConnectButton" Content="Connect" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="5" Command="{Binding Path=ConnectBottleCommand}"/>
-                        <Button x:Name="BottleStartButton" Content="Start" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="5" Command="{Binding Path=StartSessionCommand}"/>
-                        <Button x:Name="BottleStopButton" Content="Stop" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="5" Command="{Binding Path=StopSessionCommand}"/>
-                        <Button x:Name="BottleDisconnectButton" Content= "Disconnect" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="5" Command="{Binding Path=DisconnectBottleCommand}"/>
-                    </StackPanel>          
+                    <Button x:Name="BottleConnectButton" Content="Connect" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="5" Command="{Binding Path=ConnectBottleCommand}"/>
+                    <Button x:Name="BottleStartButton" Content="Start" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="5" Command="{Binding Path=StartSessionCommand}"/>
+                    <Button x:Name="BottleStopButton" Content="Stop" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="5" Command="{Binding Path=StopSessionCommand}"/>
+                    <Button x:Name="BottleDisconnectButton" Content= "Disconnect" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="5" Command="{Binding Path=DisconnectBottleCommand}"/>
+                </StackPanel>
             </StackPanel>
         </GroupBox>
     </Grid>

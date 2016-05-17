@@ -25,7 +25,12 @@
                         </DataTemplate>                        
                     </ListBox.ItemTemplate>
                 </ListBox>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Button x:Name="BottleLogBrowseButton" Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="5"/>
+                    <TextBox x:Name="BottleLogFilePath" Text="" Width="450" Height="20"/>
+                </StackPanel>
             </StackPanel>
+            
         </GroupBox>
     </Grid>
 </UserControl>
