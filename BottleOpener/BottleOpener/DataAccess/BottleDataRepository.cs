@@ -41,6 +41,7 @@ namespace BottleOpener.DataAccess
 
         private List<BottleData> _bottleData;
         private BottleDevice _device;
+        private StringBuilder _csvLogBuffer;
         bool _isThreadStarted = false;
         Thread _readThread;
 
@@ -49,8 +50,9 @@ namespace BottleOpener.DataAccess
         #region Constructor
 
         private BottleDataRepository()
-        {         
+        {
             _bottleData = new List<BottleData>();
+            _csvLogBuffer = new StringBuilder();
 
             _readThread = new Thread(new ThreadStart(AddData));
             _readThread.Name = "BottleDataThread";
@@ -84,6 +86,18 @@ namespace BottleOpener.DataAccess
                     BottleData _latestData = new BottleData(_device.RetrieveData());
                     _bottleData.Add(_latestData);
                     OnUpdated(new BottleDataEventArgs(_latestData.AvgData));
+
+                    //Write CSV string
+                    var csvString = new StringBuilder();
+
+                    foreach (int value in _latestData.RawData)
+                    {
+                        csvString.AppendFormat("{0},", value);
+                    }
+
+                    csvString.AppendFormat("{0}", _latestData.Time.ToShortTimeString());
+                    _csvLogBuffer.AppendLine(csvString.ToString());
+
                     Thread.Sleep(1);
                 }
             }
@@ -96,26 +110,59 @@ namespace BottleOpener.DataAccess
 
         public void ConnectBottle(string port)
         {
-            _device = new BottleDevice(port, 28800);
-            _device.Connect();
+            try
+            {
+                _device = new BottleDevice(port, 28800);
+                _device.Connect();
+            } catch (Exception)
+            {
+                BottleLogger.Instance.Write("Error occurred while connecting to bottle.");
+            }
         }
 
         public void StartDataCollection()
         {
-            _device.StartData();
+            try
+            {
+                _device.StartData();
+            }
+            catch (Exception)
+            {
+                BottleLogger.Instance.Write("Bottle not connected. Please establish a connection.");
+            }
         }
-
         public void StopDataCollection()
         {
-            _device.StopData();
+            try
+            {
+                _device.StopData();
+
+                //Dump to the log file if there was anything to write
+                if (_csvLogBuffer.Length > 0)
+                {
+                    string filePath = System.IO.Directory.GetCurrentDirectory();
+                    string fileName = string.Format(@"{0}\log{1}.csv", filePath, DateTime.Now.ToString("yyMdHHmm"));
+
+                    System.IO.File.AppendAllText(fileName, _csvLogBuffer.ToString());
+                }
+            } catch (Exception)
+            {
+                BottleLogger.Instance.Write("Bottle not connected. Please establish a connection.");
+            }
         }
 
         public void DisconnectBottle()
         {
-            _device.Disconnect();
+            try
+            {
+                _device.Disconnect();
+            }
+            catch (Exception)
+            {
+                BottleLogger.Instance.Write("Bottle not connected. Please establish a connection.");
+            }
         }
-        #endregion
-
+        #endregion     
 
     }
 }
