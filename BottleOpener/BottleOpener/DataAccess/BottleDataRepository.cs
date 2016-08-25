@@ -95,7 +95,7 @@ namespace BottleOpener.DataAccess
                         csvString.AppendFormat("{0},", value);
                     }
 
-                    csvString.AppendFormat("{0}", _latestData.Time.ToShortTimeString());
+                    csvString.AppendFormat("{0}", _latestData.Time.ToString("MMdHHmmssfff"));
                     _csvLogBuffer.AppendLine(csvString.ToString());
 
                     Thread.Sleep(1);
@@ -141,7 +141,7 @@ namespace BottleOpener.DataAccess
                 if (_csvLogBuffer.Length > 0)
                 {
                     string filePath = System.IO.Directory.GetCurrentDirectory();
-                    string fileName = string.Format(@"{0}\log{1}.csv", filePath, DateTime.Now.ToString("yyMdHHmm"));
+                    string fileName = string.Format(@"{0}\log{1}.csv", filePath, DateTime.Now.ToString("yyMdHHmmss"));
 
                     System.IO.File.AppendAllText(fileName, _csvLogBuffer.ToString());
                 }
