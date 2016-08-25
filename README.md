@@ -1,2 +1,2 @@
 # Bottle-Opener
-An apps that collects data through serial interfaces
+An app that collects data through serial interfaces
